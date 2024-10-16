@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class MovingDataList {
   List<MovingDataModel>? estimates;
 
@@ -33,6 +35,9 @@ class MovingDataModel {
   String? unpackingService;
   String? packingService;
   List<Inventory>? inventory;
+  String? fromCity;
+  String? tocity;
+  String? total_items;
 
   MovingDataModel({
     this.estimateId,
@@ -51,6 +56,9 @@ class MovingDataModel {
     this.unpackingService,
     this.packingService,
     this.inventory,
+    this.fromCity,
+    this.tocity,
+    this.total_items,
   });
 
   factory MovingDataModel.fromJson(Map<String, dynamic> json) {
@@ -73,6 +81,9 @@ class MovingDataModel {
       inventory: (json['items']['inventory'] as List<dynamic>?)
           ?.map((i) => Inventory.fromJson(i))
           .toList(),
+         fromCity:json['from_address']['fromCity'],
+          tocity:json['to_address']['toCity'],
+          total_items:json['total_items'],
     );
   }
 }
