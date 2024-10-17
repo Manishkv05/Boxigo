@@ -7,7 +7,7 @@ class MovingDataService {
   final String apiUrl = "http://test.api.boxigo.in/sample-data/";
 
 Stream<MovingDataList?> fetchMovingData() async* {
-  while (true) {
+  // while (true) {
     try {
       final response = await http.get(Uri.parse(apiUrl));
 
@@ -22,9 +22,9 @@ Stream<MovingDataList?> fetchMovingData() async* {
     } catch (e) {
       print("Error fetching data: $e");
       yield null; // Emit null on error
-    }
+    
 
-    await Future.delayed(Duration(seconds: 10)); // Optional: Delay before fetching again
+    // await Future.delayed(Duration(seconds: 10)); // Optional: Delay before fetching again
   }
 }
 
