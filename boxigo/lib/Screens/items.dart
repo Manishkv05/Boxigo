@@ -1,65 +1,108 @@
+import 'package:flutter/material.dart';
 import 'package:boxigo/Models/models.dart';
 import 'package:boxigo/Screens/itemslist.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Items extends StatefulWidget {
-    MovingDataModel? data;
-   Items( this.data, { super.key});
-   
-  
- 
+  final MovingDataModel? data;
 
+  Items(this.data, {super.key});
 
   @override
   State<Items> createState() => _ItemsState();
 }
 
 class _ItemsState extends State<Items> {
+  bool isExpanded = false;
+
   @override
   void initState() {
-    
     super.initState();
-          if (widget.data != null) {
-    // if (widget.data!.customItems != null) {
-    //   print('Custom Items:');
-    //   // Text(widget.data.customItems!.units.toString),
-    //    print('Units: ${widget.data!.customItems!.units}');
-    //   for (var item in widget.data!.customItems!.items ?? []) {
-    //     print(' - Item ID: ${item.id}');
-    //     print('   Name: ${item.itemName}');
-    //     print('   Description: ${item.itemDescription}');
-    //     print('   Height: ${item.itemHeight}');
-    //     print('   Length: ${item.itemLength}');
-    //     print('   Width: ${item.itemWidth}');
-    //     print('   Quantity: ${item.itemQty}');
-    //   }
-    // }
-    if(widget.data!=null){
-      for(var i in widget.data!.inventory??[]){
-     print(i.id);
+    if (widget.data != null) {
+      if (widget.data != null) {
+        for (var i in widget.data!.inventory ?? []) {
+          print(i.id);
+        }
       }
     }
-   // print(widget.data!.inventory.toString());
-        }
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        child:ListView.builder(
-        itemCount: widget.data!.inventory!.length,
-        itemBuilder:(context, index){ 
-  return InventoryDropdown( inventory : widget.data!.inventory![index], );
-         
-       // Text( widget.data!.inventory![index].id.toString());
-        }
-        )
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Inventory & Custom Items'),
+      ),
+      body: ListView(
+        children: [
         
+          if (widget.data?.inventory != null)
+            ...widget.data!.inventory!.map((inventoryItem) {
+              return InventoryDropdown(inventory: inventoryItem);
+            }).toList(),
+
+        
+          if (widget.data?.customItems?.items != null &&
+              widget.data!.customItems!.items!.isNotEmpty)
+            Theme(
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 8),
+                child: ExpansionTile(
+                  childrenPadding:EdgeInsets.only(left: 10),
+                  collapsedBackgroundColor: Colors.grey.shade300,
+                  backgroundColor: Colors.grey.shade300,
+                  title: Container(
+                    child: Padding(
+                       padding: EdgeInsets.only(top: 10, bottom: 10,left: 10),
+                      child: Text(
+                        widget.data!.customItems!.items![0].itemName ?? "Unknown Item",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ),
+                  children: [
+                    ListTile(
+                      title: Text(
+                          "Description: ${widget.data!.customItems!.items![0].itemDescription ?? 'N/A'}"),
+                    ),
+                    ListTile(
+                      title: Text(
+                          "Quantity: ${widget.data!.customItems!.items![0].itemQty ?? 'N/A'}"),
+                    ),
+                    ListTile(
+                      title: Text(
+                        "L: ${widget.data!.customItems!.items![0].itemLength ?? 'N/A'} ${formatUnit(widget.data!.customItems!.units.toString())}    W: ${widget.data!.customItems!.items![0].itemWidth ?? 'N/A'} ${formatUnit(widget.data!.customItems!.units.toString())}   H: ${widget.data!.customItems!.items![0].itemHeight ?? 'N/A'} ${formatUnit(widget.data!.customItems!.units.toString())} ",
+                     style: TextStyle(fontWeight: FontWeight.bold), ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                "No custom items available",
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ),
+        ],
       ),
     );
   }
+  String formatUnit(String unit) {
+  if (unit.length > 2) {
+    return "${unit[0]}${unit[unit.length - 1]}"; // First and last characters
+  }
+  return unit; // Return as is if unit is 2 characters or less
 }
+}
+
 //    itemscard(Inventory){
 
 //     return Center(child: Container( child: ExpansionTile(

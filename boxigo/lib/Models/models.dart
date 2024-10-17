@@ -105,7 +105,6 @@ class MovingDataModel {
     );
   }
 }
-
 class CustomItems {
   String? units;
   List<CustomItem>? items;
@@ -115,9 +114,7 @@ class CustomItems {
   factory CustomItems.fromJson(Map<String, dynamic> json) {
     return CustomItems(
       units: json['units'],
-      items: (json['items'] as List<dynamic>? ?? [])
-          .map((i) => CustomItem.fromJson(i))
-          .toList(),
+      items: (json['items'] as List<dynamic>?)?.map((item) => CustomItem.fromJson(item)).toList(),
     );
   }
 }

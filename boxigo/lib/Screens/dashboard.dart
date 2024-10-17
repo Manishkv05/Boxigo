@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:boxigo/Models/models.dart';
 import 'package:boxigo/Screens/floor_info.dart';
 import 'package:boxigo/Screens/items.dart';
+import 'package:boxigo/Screens/test.dart';
 import 'package:boxigo/servise/boxi_aoi_servise.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -70,7 +71,7 @@ class _dashboardState extends State<dashboard> {
                     ),
                   ),
                   Container(
-                    height: 400,
+                    height: MediaQuery.of(context).size.height*0.8,
                     child: ListView.builder(
                       itemCount: dataList?.estimates?.length ?? 0,
                       itemBuilder: (context, index) {
@@ -106,79 +107,156 @@ class _dashboardState extends State<dashboard> {
   // Format the time (HH:mm:ss)
   String formattedTime = DateFormat('HH:mm').format(dateTime); // e.g., "22:00:00"
 
-return Container(child: Column(
+return Container(
+  child: Column(
+   
   children: [
     Row(
       children: [
-        Container(width:100,height:200,
-        
-    
-     
-        child: Column(
-          children: [
-            Text(formattedMonth),
-            Text(formattedDay),
-            Text(formattedTime)
-          ],
-        ),),
-        Container(width: 300,height: 200,child: Row(
-          children: [
-            Column(
-              children: [
-                Container(
-                  width: 200,
-                  child: Row(
-                    children: [
-                   //   Text(data!.fromCity??""),
-                        Text(data!.estimateId ?? ''),
-                    ],
-                  ),
-                ),
-                Container(width: 200,height: 50, child: Text(data!.movingFrom??""),),
-                Container(width: 200,
-                  child: Row(children: [
-                  Text(data!.propertySize??""),
-                 // Text(data!.total_items??""),
-                //  Text(data!.inventory.toString()),
-
-                 Padding(
-                   padding: const EdgeInsets.all(8.0),
-                   child: 
-                   Text(getTotalItemsForBoxesTrolley(data!.inventory).toString(),style: TextStyle(color: Colors.red),),
-                 ),
-                    Text(data!.total_items.toString(),style: TextStyle(color: Colors.red),),
-                 // Text(getTotalItemsForBoxesTrolley(data!.inventory??"").toString()),
-                  Text(data!.distance??""),
-                ],),),
-                Container(
-                  width: 200, child: Column(
+        Padding(
+          padding: const EdgeInsets.only(top:0.0),
+          child: Container(width:MediaQuery.of(context).size.width*0.2,
+          //height:185,
+          child: Column(
+             mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                   // Text(data!.tocity??""),
-                     Container(width: 200,height: 50, child: Text(data!.movingTo??""),),
+                    Text(
+                      formattedMonth,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                       
+                      ),
+                    ),
+                    Text(
+                      formattedDay,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                    Text(
+                      formattedTime,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: const Color.fromARGB(255, 119, 118, 118),
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
                   ],
-                ),)
-              ],
-            ),
+                ),
           
-          ],
-        )),
+          //  Column(
+          //   children: [
+          //     Text(formattedMonth),
+          //     Text(formattedDay),
+          //     Text(formattedTime)
+          //   ],
+          // ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top:0.0),
+          child: Container(width: MediaQuery.of(context).size.width*0.7,child: Row(
+            children: [
+              Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.7,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(data!.fromCity??"",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                          Text(data!.estimateId ?? '',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                  Container(width:  MediaQuery.of(context).size.width*0.7, child: Text(data!.movingFrom??"",style: TextStyle(color: Colors.grey),),),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Container(width:  MediaQuery.of(context).size.width*0.7,
+                      child: Column(
+                        children: [
+                          Row(
+                                          
+                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(Icons.house_rounded),
+                                  Icon(Icons.inventory),
+                                      Icon(Icons.emoji_transportation),
+                                          Icon(Icons.route),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                          Text(data!.propertySize??""),
+                                           
+                                    
+                              Text(data!.total_items.toString()+" items",),
+                            Text(getTotalItemsForBoxesTrolley(data!.inventory).toString()+" boxes",),
+                                             // Text(getTotalItemsForBoxesTrolley(data!.inventory??"").toString()),
+                          Text(data!.distance??""),
+                                            ],),
+                        ],
+                      ),),
+                  ),
+                  Container(
+                    width:  MediaQuery.of(context).size.width*0.7, child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                     Text(data!.tocity??"",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                       Container(width: MediaQuery.of(context).size.width*0.7, child: Text(data!.movingTo??"",style: TextStyle(color: Colors.grey),),),
+                    ],
+                  ),)
+                ],
+              ),
+            
+            ],
+          )),
+        ),
         
       ],
     ),
-    Container(height: 100,child:TextButton(onPressed: (){
-       Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Items(data)),
-            );
-    },child: Text('items'),),),
-       Container(height: 100,child:TextButton(onPressed: (){
-       Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => FloorInfo(data)),
-            );
-    },child: Text('floor info'),),)
+    Padding(
+      padding:  EdgeInsets.only(left:MediaQuery.of(context).size.width*0.2 ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            height: 40,
+            width:  MediaQuery.of(context).size.width*0.38,
+            decoration: BoxDecoration(border: Border.all(color: Colors.red)),
+          child: GestureDetector(onTap:  (){
+             Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Items(data)),
+                  );
+          },child: Center(child: Text('view Details',style: TextStyle(color: Colors.red),))),),
+          Container( 
+            height: 40,
+            width: MediaQuery.of(context).size.width*0.38,
+            color: Colors.red,
+            child: GestureDetector(onTap: (){
+         Navigator.push(
+                context,
+                
+                MaterialPageRoute(builder: (context) => FloorInfo(data)),
+              );
+      },child: Center(child: Text('Submit Quote',style: TextStyle(color: Colors.white
+      ),))),),
+        ],
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Divider(),
+    )
+       
   ],
-),);
+),
+);
   }
   
 int getTotalItemsForBoxesTrolley(List<Inventory>? inventory) {
@@ -208,4 +286,10 @@ int getTotalItemsForBoxesTrolley(List<Inventory>? inventory) {
 
 
 
-}
+} // Column(
+                          //   children: [
+                          //     Text('|',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),),
+                          //        Text('|',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),),
+                          //     Icon(Icons.keyboard_double_arrow_down_sharp,color: Colors.red),
+                          //   ],
+                          // ),
