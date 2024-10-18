@@ -71,7 +71,7 @@ class MovingDataModel {
   });
 
   factory MovingDataModel.fromJson(Map<String, dynamic> json) {
-   print(json['items']['customItems'].toString());
+   //print(json['items']['customItems'].toString());
     return MovingDataModel(
       estimateId: json['estimate_id'],
       userId: json['user_id'],
@@ -173,7 +173,7 @@ class Inventory {
     );
    
     } catch (e) {
-    print('Error parsing Inventory: $e');
+   // print('Error parsing Inventory: $e');
     return Inventory();
   }
   }
@@ -226,7 +226,7 @@ class Item {
     } else {
       type = "NULL"; // Default value if null or missing
     }
-   print(json['size'].toString());
+   //print(json['size'].toString());
     return Item(
       name: json['name'],
       displayName: json['displayName'],

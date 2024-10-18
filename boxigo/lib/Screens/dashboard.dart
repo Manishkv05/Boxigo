@@ -39,7 +39,7 @@ class _dashboardState extends State<dashboard> {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
-          print(snapshot.data.toString());
+         // print(snapshot.data.toString());
           // Access your MovingDataList here
           MovingDataList? dataList = snapshot.data;
           return Scaffold(
@@ -56,6 +56,7 @@ class _dashboardState extends State<dashboard> {
                       child:     Container(
                 color: Colors.white, // Background color for the TabBar section
                 child: TabBar(
+                  isScrollable: true,
                   labelColor: Colors.red, // Active label color
                   unselectedLabelColor: Colors.black, // Inactive label color
                   indicatorColor: Colors.red, // Active line color
