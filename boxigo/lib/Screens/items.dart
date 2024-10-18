@@ -30,9 +30,7 @@ class _ItemsState extends State<Items> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Inventory & Custom Items'),
-      ),
+    
       body: ListView(
         children: [
         

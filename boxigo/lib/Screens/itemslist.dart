@@ -134,6 +134,7 @@
 // }import 'package:flutter/material.dart';
 
 import 'package:boxigo/Models/models.dart';
+import 'package:boxigo/utilities/icons_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:boxigo/Models/models.dart';
@@ -164,6 +165,7 @@ class _InventoryDropdownState extends State<InventoryDropdown> {
               padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 10),
               child: ExpansionTile(
                collapsedBackgroundColor:Colors.grey.shade300,
+               backgroundColor: Colors.grey.shade300,
                 title:  Container(
                 //color: Colors.grey.shade300, // Background for the title
                 padding: EdgeInsets.only(top: 10, bottom: 10,left: 10),
@@ -238,7 +240,7 @@ class _InventoryDropdownState extends State<InventoryDropdown> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Icon or item representation
-                    Icon(Icons.chair_rounded, size: 24), // Replace with appropriate icons
+                    Icon(getItemIcon(item.displayName), size: 24), // Replace with appropriate icons
 
                     SizedBox(width: 16), // Space between icon and text
 

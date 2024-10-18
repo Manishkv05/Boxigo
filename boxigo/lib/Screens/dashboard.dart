@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:boxigo/Models/models.dart';
 import 'package:boxigo/Screens/floor_info.dart';
 import 'package:boxigo/Screens/items.dart';
+import 'package:boxigo/Screens/new_leads_screen.dart';
 import 'package:boxigo/Screens/test.dart';
 import 'package:boxigo/servise/boxi_aoi_servise.dart';
 import 'package:flutter/material.dart';
@@ -27,76 +28,81 @@ class _dashboardState extends State<dashboard> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<MovingDataList?>(
-        stream: MovingDataService().fetchMovingData(),
-        builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator()); // Show loading indicator
-      } else if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      } else if (snapshot.hasData) {
-        print(snapshot.data.toString());
-        // Access your MovingDataList here
-        MovingDataList? dataList = snapshot.data;
-        return Scaffold(
-          appBar: AppBar(actions:[
-            IconButton(onPressed: (){}, icon: Icon(Icons.notifications_none_outlined)),
-             IconButton(onPressed: (){}, icon: Icon(Icons.search)),
-
-          ]),
-          body: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(color: Colors.amber,
-                    height: 60,
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        GestureDetector(
-                          onTap: (){
-                            setState(() {
-                               is_all=!is_all;
-                            });
-                          
-
-                          }, child: Container(height: 60, child: Center(child: Text("All",style: TextStyle(color:is_all?Colors.amber: Colors.black),)))),
-                          // Text("New"),
-                          //   Text("Follow UP"),
-                          //     Text("Booked"),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height*0.8,
-                    child: ListView.builder(
-                      itemCount: dataList?.estimates?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        return cards(dataList!.estimates![index]);
-                        // ListTile(
-                        //   title: Text(dataList!.estimates![index].estimateId ?? ''),
-                        //   subtitle: Text(dataList.estimates![index].movingFrom ?? ''),
-                        // );
-                      },
-                    ),
-                  ),
-                ],
+    return  DefaultTabController(
+      length: 5,
+      child: Scaffold(
+        body: StreamBuilder<MovingDataList?>(
+          stream: MovingDataService().fetchMovingData(),
+          builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator()); // Show loading indicator
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          print(snapshot.data.toString());
+          // Access your MovingDataList here
+          MovingDataList? dataList = snapshot.data;
+          return Scaffold(
+          
+            body: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Divider(),
+                    Container(
+                     
+                      width: double.infinity,
+                      child:     Container(
+                color: Colors.white, // Background color for the TabBar section
+                child: TabBar(
+                  labelColor: Colors.red, // Active label color
+                  unselectedLabelColor: Colors.black, // Inactive label color
+                  indicatorColor: Colors.red, // Active line color
+                  indicatorWeight: 4.0, 
+                  // Thickness of the active line
+                  tabs: [
+                    Tab(text: "  All  ",), // Tab for first screen
+                    Tab(text: "New"), // Tab for second screen
+                   Tab(text: "Follow Up"),
+                    Tab(text: "Booked"), 
+                     Tab(text: "In Track"),  // Tab for third screen  
+                  ]               
+                ),
               ),
-            ),
-        );
-      } else {
-        return Text('No data found');
-      }
-        },
+                    ),
+                     
+                    Expanded(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height*0.77,
+                        child: ListView.builder(
+                          itemCount: dataList?.estimates?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return cards(dataList!.estimates![index]);
+                            // ListTile(
+                            //   title: Text(dataList!.estimates![index].estimateId ?? ''),
+                            //   subtitle: Text(dataList.estimates![index].movingFrom ?? ''),
+                            // );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          );
+        } else {
+          return Text('No data found');
+        }
+          },
+        ),
       ),
     );
 
 
     
   }
+  
  Widget cards(MovingDataModel? data){
   
  DateTime dateTime = DateTime.parse(data!.movingOn??"");
@@ -107,16 +113,28 @@ class _dashboardState extends State<dashboard> {
   // Format the time (HH:mm:ss)
   String formattedTime = DateFormat('HH:mm').format(dateTime); // e.g., "22:00:00"
 
-return Container(
-  child: Column(
-   
-  children: [
-    Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top:0.0),
-          child: Container(width:MediaQuery.of(context).size.width*0.2,
-          //height:185,
+return Padding(
+  padding: const EdgeInsets.all(4.0),
+  child: Container(
+    decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+    
+    child: Column(
+     mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Container(width:MediaQuery.of(context).size.width*0.2,
+          height:250,
           child: Column(
              mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -155,107 +173,121 @@ return Container(
           //   ],
           // ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top:0.0),
-          child: Container(width: MediaQuery.of(context).size.width*0.7,child: Row(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width*0.7,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Padding(
+            padding: const EdgeInsets.only(top:0.0),
+            child: Container(
+             // width: MediaQuery.of(context).size.width*0.7,
+              child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                   
+                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(data!.fromCity??"",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                          
+                            Text(data!.estimateId ?? '',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold)),
+                        ]
+                    ),
+                    Container(width:  MediaQuery.of(context).size.width*0.78, 
+                    child: Text(data!.movingFrom??"",style: TextStyle(color: Colors.grey),),),
+                    Row(
                       children: [
-                        Text(data!.fromCity??"",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
-                          Text(data!.estimateId ?? '',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold)),
+                        Column(children: [
+                           Text('|',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),),
+                                 Text('|',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),),
+                               Icon(Icons.keyboard_double_arrow_down_sharp,color: Colors.red),
+                        ],),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Container(width:  MediaQuery.of(context).size.width*0.7,
+                            child: Column(
+                              children: [
+                                Row(
+                                                
+                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(Icons.house_rounded),
+                                        Icon(Icons.inventory),
+                                            Icon(Icons.emoji_transportation),
+                                                Icon(Icons.route),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                Text(data!.propertySize??""),
+                                                 
+                                          
+                                    Text(data!.total_items.toString()+" items",),
+                                  Text(getTotalItemsForBoxesTrolley(data!.inventory).toString()+" boxes",),
+                                                   // Text(getTotalItemsForBoxesTrolley(data!.inventory??"").toString()),
+                                Text(data!.distance??""),
+                                                  ],),
+                              ],
+                            ),),
+                        ),
                       ],
                     ),
-                  ),
-                  Container(width:  MediaQuery.of(context).size.width*0.7, child: Text(data!.movingFrom??"",style: TextStyle(color: Colors.grey),),),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Container(width:  MediaQuery.of(context).size.width*0.7,
-                      child: Column(
-                        children: [
-                          Row(
-                                          
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(Icons.house_rounded),
-                                  Icon(Icons.inventory),
-                                      Icon(Icons.emoji_transportation),
-                                          Icon(Icons.route),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                          Text(data!.propertySize??""),
-                                           
-                                    
-                              Text(data!.total_items.toString()+" items",),
-                            Text(getTotalItemsForBoxesTrolley(data!.inventory).toString()+" boxes",),
-                                             // Text(getTotalItemsForBoxesTrolley(data!.inventory??"").toString()),
-                          Text(data!.distance??""),
-                                            ],),
-                        ],
-                      ),),
-                  ),
-                  Container(
-                    width:  MediaQuery.of(context).size.width*0.7, child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                     Text(data!.tocity??"",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
-                       Container(width: MediaQuery.of(context).size.width*0.7, child: Text(data!.movingTo??"",style: TextStyle(color: Colors.grey),),),
-                    ],
-                  ),)
-                ],
-              ),
-            
-            ],
-          )),
-        ),
-        
-      ],
-    ),
-    Padding(
-      padding:  EdgeInsets.only(left:MediaQuery.of(context).size.width*0.2 ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            height: 40,
-            width:  MediaQuery.of(context).size.width*0.38,
-            decoration: BoxDecoration(border: Border.all(color: Colors.red)),
-          child: GestureDetector(onTap:  (){
-             Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Items(data)),
-                  );
-          },child: Center(child: Text('view Details',style: TextStyle(color: Colors.red),))),),
-          Container( 
-            height: 40,
-            width: MediaQuery.of(context).size.width*0.38,
-            color: Colors.red,
-            child: GestureDetector(onTap: (){
-         Navigator.push(
-                context,
-                
-                MaterialPageRoute(builder: (context) => FloorInfo(data)),
-              );
-      },child: Center(child: Text('Submit Quote',style: TextStyle(color: Colors.white
-      ),))),),
+                    Container(
+                      width:  MediaQuery.of(context).size.width*0.75, child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                       Text(data!.tocity??"",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                         Container(width: MediaQuery.of(context).size.width*0.7, child: Text(data!.movingTo??"",style: TextStyle(color: Colors.grey),),),
+  
+  
+                      ],
+                    ),),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 3.0,top:15,bottom: 10),
+                              child: Container(
+                                          height: 38,
+                                          width:  MediaQuery.of(context).size.width*0.375,
+                                          decoration: BoxDecoration(border: Border.all(color: Colors.red)),
+                                        child: GestureDetector(onTap:  (){
+                                           Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => New_leads( data: data,)),
+                                                );
+                                        },child: Center(child: Text('view Details',style: TextStyle(color: Colors.red),))),),
+                            ),
+                                        Padding(
+                                         padding: const EdgeInsets.only(left: 4.0,top:15,bottom: 10),
+                                          child: Container( 
+                                                      height: 38,
+                                                      width: MediaQuery.of(context).size.width*0.375,
+                                                      color: Colors.red,
+                                                      child: GestureDetector(onTap: (){},
+                                                      child: Center(child: Text('Submit Quote',style: TextStyle(color: Colors.white
+                                                ),))),),
+                                        ),
+                          ],
+                        ),
+          
+                  ],
+                ),
+              
+              ],
+            )),
+          ),
+          
         ],
       ),
-    ),
-    Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Divider(),
-    )
-       
-  ],
-),
+     
+      // Padding(
+      //   padding: const EdgeInsets.only(top: 5.0),
+      //   child: Divider(),
+      // )
+         
+    ],
+  ),
+  ),
 );
   }
   

@@ -161,7 +161,7 @@ class Inventory {
   Inventory({this.id, this.displayName, this.category});
 
   factory Inventory.fromJson(Map<String, dynamic> json) {
-    print(json['id'].toString());
+    //print(json['id'].toString());
    try{
 
     return Inventory(
@@ -211,6 +211,7 @@ class Item {
   
 
   factory Item.fromJson(Map<String, dynamic> json) {
+    print(json['displayName']);
     String? sizeValue;
     String? type;
     if ( json['size'] != null&&json['size'] !=[]) {

@@ -13,7 +13,7 @@ class _FloorInfoState extends State<FloorInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+     
       body: Center(
         child: Column(
           children: [
