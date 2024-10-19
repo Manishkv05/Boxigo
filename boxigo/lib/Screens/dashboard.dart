@@ -181,18 +181,19 @@ return Padding(
               child: Row(
               children: [
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                    
                        Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(data!.fromCity??"",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
-                          
+                  SizedBox(width: MediaQuery.of(context).size.width*0.34,),
                             Text(data!.estimateId ?? '',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold)),
                         ]
                     ),
-                    Container(width:  MediaQuery.of(context).size.width*0.78, 
+                    Container(width:  MediaQuery.of(context).size.width*0.7, 
                     child: Text(data!.movingFrom??"",style: TextStyle(color: Colors.grey),),),
                     Row(
                       children: [
